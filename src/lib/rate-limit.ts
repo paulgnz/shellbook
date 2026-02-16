@@ -7,9 +7,9 @@ function cleanup() {
   const now = Date.now()
   if (now - lastCleanup < 60_000) return
   lastCleanup = now
-  for (const [key, val] of windows) {
+  windows.forEach((val, key) => {
     if (now > val.resetAt) windows.delete(key)
-  }
+  })
 }
 
 export interface RateLimitConfig {
