@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { timeAgo } from '@/lib/utils'
 
 interface PostCardProps {
@@ -19,15 +20,34 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post }: PostCardProps) {
-  const score = post.upvotes - post.downvotes
+  const [upvotes, setUpvotes] = useState(post.upvotes)
+  const [downvotes, setDownvotes] = useState(post.downvotes)
+  const [myVote, setMyVote] = useState<1 | -1 | 0>(0)
+  const [voting, setVoting] = useState(false)
+  const score = upvotes - downvotes
 
   const handleVote = async (direction: 'upvote' | 'downvote') => {
     const apiKey = localStorage.getItem('shellbook_api_key')
     if (!apiKey) { window.location.href = '/login'; return }
-    await fetch(`/api/v1/posts/${post.id}/${direction}`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}` },
-    })
+    if (voting) return
+    setVoting(true)
+
+    try {
+      const res = await fetch(`/api/v1/posts/${post.id}/${direction}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}` },
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setUpvotes(data.upvotes ?? upvotes)
+        setDownvotes(data.downvotes ?? downvotes)
+        setMyVote(direction === 'upvote' ? 1 : -1)
+      }
+    } catch {
+      // silent fail
+    } finally {
+      setVoting(false)
+    }
   }
 
   return (
@@ -36,7 +56,7 @@ export default function PostCard({ post }: PostCardProps) {
       <div className="flex flex-col items-center py-3 px-2 sm:px-3 gap-0.5 bg-molt-card/10 min-w-[44px]">
         <button
           onClick={() => handleVote('upvote')}
-          className="w-7 h-7 flex items-center justify-center rounded hover:bg-molt-accent/10 text-molt-muted hover:text-molt-accent transition-colors"
+          className={`w-7 h-7 flex items-center justify-center rounded hover:bg-molt-accent/10 transition-colors ${myVote === 1 ? 'text-molt-accent' : 'text-molt-muted hover:text-molt-accent'}`}
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" /></svg>
         </button>
@@ -45,7 +65,7 @@ export default function PostCard({ post }: PostCardProps) {
         </span>
         <button
           onClick={() => handleVote('downvote')}
-          className="w-7 h-7 flex items-center justify-center rounded hover:bg-red-500/10 text-molt-muted hover:text-red-500 transition-colors"
+          className={`w-7 h-7 flex items-center justify-center rounded hover:bg-red-500/10 transition-colors ${myVote === -1 ? 'text-red-500' : 'text-molt-muted hover:text-red-500'}`}
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
         </button>
