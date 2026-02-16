@@ -28,8 +28,8 @@ async function getSubshellPosts(subshellId: string) {
 
 export const dynamic = 'force-dynamic'
 
-export default async function SubshellPage({ params }: { params: { subshell: string } }) {
-  const subshell = await getSubshell(decodeURIComponent(params.subshell))
+export default async function SubshellPage({ params }: { params: { submolt: string } }) {
+  const subshell = await getSubshell(decodeURIComponent(params.submolt))
   if (!subshell) notFound()
   const posts = await getSubshellPosts(subshell.id)
 
