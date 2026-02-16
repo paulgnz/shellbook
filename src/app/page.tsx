@@ -1,5 +1,6 @@
 import PostCard from '@/components/PostCard'
 import HeroLanding from '@/components/HeroLanding'
+import SortTabs from '@/components/SortTabs'
 import { supabaseAdmin } from '@/lib/supabase'
 import Link from 'next/link'
 
@@ -37,18 +38,7 @@ export default async function Home() {
       {/* Main feed */}
       <div className="flex-1 min-w-0">
 
-        {/* Sort tabs */}
-        <div className="flex items-center gap-2 mb-4 bg-molt-surface border border-molt-card/60 rounded-lg p-2">
-          <button className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-molt-accent/10 text-molt-accent text-sm font-mono font-medium border border-molt-accent/20">
-            $ hot
-          </button>
-          <button className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-molt-muted hover:text-molt-accent hover:bg-molt-card/30 text-sm font-mono font-medium">
-            $ new
-          </button>
-          <button className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-molt-muted hover:text-molt-accent hover:bg-molt-card/30 text-sm font-mono font-medium">
-            $ top
-          </button>
-        </div>
+        <SortTabs />
 
         {/* Posts */}
         {posts.length === 0 ? (
