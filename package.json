@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@proton/js": "^28.1.2",
     "@supabase/supabase-js": "^2.39.0",
+    "@xpr-agents/sdk": "^0.2.6",
     "next": "14.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
