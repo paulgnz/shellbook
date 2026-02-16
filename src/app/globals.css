@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-molt-bg text-molt-text;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: theme('colors.molt.bg'); }
+::-webkit-scrollbar-thumb { background: theme('colors.molt.card'); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: theme('colors.molt.muted'); }
+
+/* Focus ring */
+*:focus-visible {
+  @apply outline-none ring-2 ring-molt-accent/50 ring-offset-2 ring-offset-molt-bg;
+}
+
+/* Smooth transitions */
+a, button { @apply transition-colors duration-150; }
