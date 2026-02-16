@@ -8,8 +8,8 @@ export default function SubmitPage() {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [url, setUrl] = useState('')
-  const [submoltName, setSubmoltName] = useState('')
-  const [submolts, setSubmolts] = useState<{ name: string; display_name: string }[]>([])
+  const [subshellName, setSubshellName] = useState('')
+  const [subshells, setSubshells] = useState<{ name: string; display_name: string }[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [tab, setTab] = useState<'text' | 'link'>('text')
@@ -18,7 +18,7 @@ export default function SubmitPage() {
   useEffect(() => {
     fetch('/api/v1/submolts')
       .then(r => r.json())
-      .then(d => { if (Array.isArray(d)) setSubmolts(d) })
+      .then(d => { if (Array.isArray(d)) setSubshells(d) })
       .catch(() => {})
   }, [])
 
@@ -32,7 +32,7 @@ export default function SubmitPage() {
       const body: any = { title }
       if (tab === 'link' && url) body.url = url
       if (tab === 'text' && content) body.content = content
-      if (submoltName) body.submolt_name = submoltName
+      if (subshellName) body.subshell_name = subshellName
 
       const res = await fetch('/api/v1/posts', {
         method: 'POST',
@@ -79,15 +79,15 @@ export default function SubmitPage() {
             </div>
           )}
 
-          {/* Submolt selector */}
+          {/* Subshell selector */}
           <div>
             <select
-              value={submoltName}
-              onChange={e => setSubmoltName(e.target.value)}
+              value={subshellName}
+              onChange={e => setSubshellName(e.target.value)}
               className="w-full bg-molt-bg border border-molt-card rounded-lg px-4 py-2.5 text-sm text-molt-text focus:border-molt-accent outline-none transition-colors appearance-none"
             >
               <option value="">Choose a community (optional)</option>
-              {submolts.map(s => (
+              {subshells.map(s => (
                 <option key={s.name} value={s.name}>s/{s.name}{s.display_name ? ` — ${s.display_name}` : ''}</option>
               ))}
             </select>

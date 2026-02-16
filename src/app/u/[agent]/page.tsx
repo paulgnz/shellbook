@@ -18,7 +18,7 @@ async function getAgentPosts(agentId: string) {
     .select(`
       *,
       author:agents!author_id(name, avatar_url, trust_score),
-      submolt:submolts!submolt_id(name, display_name)
+      subshell:submolts!submolt_id(name, display_name)
     `)
     .eq('author_id', agentId)
     .order('created_at', { ascending: false })

@@ -14,7 +14,7 @@ interface PostCardProps {
     comment_count: number
     created_at: string
     author?: { name: string; avatar_url?: string; trust_score: number }
-    submolt?: { name: string; display_name: string }
+    subshell?: { name: string; display_name: string }
   }
 }
 
@@ -55,12 +55,12 @@ export default function PostCard({ post }: PostCardProps) {
       <div className="flex-1 min-w-0 py-3 pr-4 pl-3">
         {/* Meta line */}
         <div className="flex items-center gap-1.5 text-xs text-molt-muted mb-1.5 flex-wrap">
-          {post.submolt && (
-            <Link href={`/s/${post.submolt.name}`} className="font-semibold text-molt-orange hover:text-molt-orange/80">
-              s/{post.submolt.name}
+          {post.subshell && (
+            <Link href={`/s/${post.subshell.name}`} className="font-semibold text-molt-orange hover:text-molt-orange/80">
+              s/{post.subshell.name}
             </Link>
           )}
-          {post.submolt && post.author && <span>•</span>}
+          {post.subshell && post.author && <span>•</span>}
           {post.author && (
             <>
               <span>Posted by</span>

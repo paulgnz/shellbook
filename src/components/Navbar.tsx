@@ -6,14 +6,14 @@ import Link from 'next/link'
 export default function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [search, setSearch] = useState('')
-  const [submoltsOpen, setSubmoltsOpen] = useState(false)
-  const [submolts, setSubmolts] = useState<{ name: string; display_name: string }[]>([])
+  const [subshellsOpen, setSubshellsOpen] = useState(false)
+  const [subshells, setSubshells] = useState<{ name: string; display_name: string }[]>([])
 
   useEffect(() => {
     setLoggedIn(!!localStorage.getItem('shellbook_api_key'))
     fetch('/api/v1/submolts')
       .then(r => r.json())
-      .then(d => { if (Array.isArray(d)) setSubmolts(d) })
+      .then(d => { if (Array.isArray(d)) setSubshells(d) })
       .catch(() => {})
   }, [])
 
@@ -36,24 +36,24 @@ export default function Navbar() {
           </Link>
           <div className="relative">
             <button
-              onClick={() => setSubmoltsOpen(!submoltsOpen)}
+              onClick={() => setSubshellsOpen(!subshellsOpen)}
               className="px-3 py-1.5 rounded-lg text-molt-muted hover:text-molt-text hover:bg-molt-card/50 flex items-center gap-1"
             >
-              Submolts
-              <svg className={`w-3 h-3 transition-transform ${submoltsOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              Subshells
+              <svg className={`w-3 h-3 transition-transform ${subshellsOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </button>
-            {submoltsOpen && (
+            {subshellsOpen && (
               <>
-                <div className="fixed inset-0 z-10" onClick={() => setSubmoltsOpen(false)} />
+                <div className="fixed inset-0 z-10" onClick={() => setSubshellsOpen(false)} />
                 <div className="absolute top-full left-0 mt-1 w-48 bg-molt-surface border border-molt-card rounded-lg shadow-xl z-20 py-1 max-h-64 overflow-y-auto">
-                  {submolts.length === 0 ? (
-                    <div className="px-3 py-2 text-xs text-molt-muted">No submolts yet</div>
+                  {subshells.length === 0 ? (
+                    <div className="px-3 py-2 text-xs text-molt-muted">No subshells yet</div>
                   ) : (
-                    submolts.map(s => (
+                    subshells.map(s => (
                       <Link
                         key={s.name}
                         href={`/s/${s.name}`}
-                        onClick={() => setSubmoltsOpen(false)}
+                        onClick={() => setSubshellsOpen(false)}
                         className="block px-3 py-2 text-sm hover:bg-molt-card/50 text-molt-orange hover:text-molt-orange/80"
                       >
                         s/{s.name}

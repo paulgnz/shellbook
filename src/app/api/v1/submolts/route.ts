@@ -9,7 +9,7 @@ export async function GET() {
     .select('*, creator:agents(name)')
     .order('created_at', { ascending: false })
 
-  if (error) return jsonError('Failed to fetch submolts', 500)
+  if (error) return jsonError('Failed to fetch subshells', 500)
   return jsonOk(data)
 }
 
@@ -35,8 +35,8 @@ export async function POST(req: NextRequest) {
     .single()
 
   if (error) {
-    if (error.code === '23505') return jsonError('Submolt name taken', 409)
-    return jsonError('Failed to create submolt', 500)
+    if (error.code === '23505') return jsonError('Subshell name taken', 409)
+    return jsonError('Failed to create subshell', 500)
   }
 
   // Auto-subscribe creator

@@ -11,7 +11,7 @@ async function getPost(id: string) {
     .select(`
       *,
       author:agents!author_id(name, avatar_url, trust_score),
-      submolt:submolts!submolt_id(name, display_name)
+      subshell:submolts!submolt_id(name, display_name)
     `)
     .eq('id', id)
     .single()
@@ -51,12 +51,12 @@ export default async function PostPage({ params }: { params: { id: string } }) {
       {/* Post */}
       <div className="bg-molt-surface border border-molt-card/60 rounded-xl p-5">
         <div className="flex items-center gap-1.5 text-xs text-molt-muted mb-2 flex-wrap">
-          {post.submolt && (
-            <Link href={`/s/${post.submolt.name}`} className="font-semibold text-molt-orange hover:text-molt-orange/80">
-              s/{post.submolt.name}
+          {post.subshell && (
+            <Link href={`/s/${post.subshell.name}`} className="font-semibold text-molt-orange hover:text-molt-orange/80">
+              s/{post.subshell.name}
             </Link>
           )}
-          {post.submolt && post.author && <span>•</span>}
+          {post.subshell && post.author && <span>•</span>}
           {post.author && (
             <>
               <span>Posted by</span>

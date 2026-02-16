@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import PostCard from '@/components/PostCard'
 import Link from 'next/link'
 
-async function getSubmolt(name: string) {
+async function getSubshell(name: string) {
   const { data } = await supabaseAdmin
     .from('submolts')
     .select('*')
@@ -12,15 +12,15 @@ async function getSubmolt(name: string) {
   return data
 }
 
-async function getSubmoltPosts(submoltId: string) {
+async function getSubshellPosts(subshellId: string) {
   const { data } = await supabaseAdmin
     .from('posts')
     .select(`
       *,
       author:agents!author_id(name, avatar_url, trust_score),
-      submolt:submolts!submolt_id(name, display_name)
+      subshell:submolts!submolt_id(name, display_name)
     `)
-    .eq('submolt_id', submoltId)
+    .eq('submolt_id', subshellId)
     .order('created_at', { ascending: false })
     .limit(25)
   return data || []
@@ -28,10 +28,10 @@ async function getSubmoltPosts(submoltId: string) {
 
 export const dynamic = 'force-dynamic'
 
-export default async function SubmoltPage({ params }: { params: { submolt: string } }) {
-  const submolt = await getSubmolt(decodeURIComponent(params.submolt))
-  if (!submolt) notFound()
-  const posts = await getSubmoltPosts(submolt.id)
+export default async function SubshellPage({ params }: { params: { subshell: string } }) {
+  const subshell = await getSubshell(decodeURIComponent(params.subshell))
+  if (!subshell) notFound()
+  const posts = await getSubshellPosts(subshell.id)
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -44,17 +44,17 @@ export default async function SubmoltPage({ params }: { params: { submolt: strin
               🐚
             </div>
             <div className="flex-1 min-w-0 pt-6">
-              <h1 className="text-xl font-bold text-molt-text">s/{submolt.name}</h1>
-              {submolt.display_name && submolt.display_name !== submolt.name && (
-                <span className="text-sm text-molt-muted">{submolt.display_name}</span>
+              <h1 className="text-xl font-bold text-molt-text">s/{subshell.name}</h1>
+              {subshell.display_name && subshell.display_name !== subshell.name && (
+                <span className="text-sm text-molt-muted">{subshell.display_name}</span>
               )}
             </div>
             <Link href="/submit" className="px-4 py-2 bg-molt-accent text-white rounded-full text-sm font-medium hover:bg-molt-accent/85 transition-colors shrink-0">
               Create Post
             </Link>
           </div>
-          {submolt.description && (
-            <p className="text-sm text-molt-muted leading-relaxed">{submolt.description}</p>
+          {subshell.description && (
+            <p className="text-sm text-molt-muted leading-relaxed">{subshell.description}</p>
           )}
         </div>
       </div>
@@ -63,7 +63,7 @@ export default async function SubmoltPage({ params }: { params: { submolt: strin
       {posts.length === 0 ? (
         <div className="bg-molt-surface border border-molt-card/60 rounded-xl p-12 text-center">
           <div className="text-3xl mb-2">🐚</div>
-          <p className="text-molt-muted mb-4">No posts in s/{submolt.name} yet.</p>
+          <p className="text-molt-muted mb-4">No posts in s/{subshell.name} yet.</p>
           <Link href="/submit" className="inline-flex items-center gap-2 px-5 py-2.5 bg-molt-accent text-white rounded-lg font-medium hover:bg-molt-accent/85 transition-colors">
             Be the first to post
           </Link>

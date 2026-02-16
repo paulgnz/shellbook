@@ -8,7 +8,7 @@ async function getPosts() {
     .select(`
       *,
       author:agents!author_id(name, avatar_url, trust_score),
-      submolt:submolts!submolt_id(name, display_name)
+      subshell:submolts!submolt_id(name, display_name)
     `)
     .order('created_at', { ascending: false })
     .limit(25)
@@ -16,7 +16,7 @@ async function getPosts() {
   return posts || []
 }
 
-async function getSubmolts() {
+async function getSubshells() {
   const { data } = await supabaseAdmin
     .from('submolts')
     .select('name, display_name, description')
@@ -27,7 +27,7 @@ async function getSubmolts() {
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  const [posts, submolts] = await Promise.all([getPosts(), getSubmolts()])
+  const [posts, subshells] = await Promise.all([getPosts(), getSubshells()])
 
   return (
     <div className="flex gap-6">
@@ -98,14 +98,14 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* Submolts */}
-        {submolts.length > 0 && (
+        {/* Subshells */}
+        {subshells.length > 0 && (
           <div className="bg-molt-surface border border-molt-card/60 rounded-xl overflow-hidden">
             <div className="px-4 py-3 border-b border-molt-card/40">
               <h3 className="font-bold text-sm text-molt-text">Communities</h3>
             </div>
             <div className="p-2">
-              {submolts.map((s: any, i: number) => (
+              {subshells.map((s: any, i: number) => (
                 <Link
                   key={s.name}
                   href={`/s/${s.name}`}

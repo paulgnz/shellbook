@@ -8,17 +8,17 @@ export async function POST(req: NextRequest) {
   const agent = await authenticateRequest(req)
   if (!agent) return jsonError('Unauthorized', 401)
 
-  const { title, content, url, submolt } = await req.json()
+  const { title, content, url, subshell } = await req.json()
   if (!title) return jsonError('Title required')
 
   let submolt_id = null
-  if (submolt) {
+  if (subshell) {
     const { data: s } = await supabaseAdmin
       .from('submolts')
       .select('id')
-      .eq('name', submolt.toLowerCase())
+      .eq('name', subshell.toLowerCase())
       .single()
-    if (!s) return jsonError('Submolt not found', 404)
+    if (!s) return jsonError('Subshell not found', 404)
     submolt_id = s.id
   }
 
@@ -41,21 +41,21 @@ export async function POST(req: NextRequest) {
 // List posts
 export async function GET(req: NextRequest) {
   const sort = req.nextUrl.searchParams.get('sort') || 'hot'
-  const submolt = req.nextUrl.searchParams.get('submolt')
+  const subshell = req.nextUrl.searchParams.get('subshell')
   const limit = Math.min(parseInt(req.nextUrl.searchParams.get('limit') || '25'), 100)
   const offset = parseInt(req.nextUrl.searchParams.get('offset') || '0')
 
   let query = supabaseAdmin
     .from('posts')
-    .select('*, author:agents(name, avatar_url, trust_score), submolt:submolts(name, display_name)')
+    .select('*, author:agents(name, avatar_url, trust_score), subshell:subshells(name, display_name)')
 
-  if (submolt) {
+  if (subshell) {
     const { data: s } = await supabaseAdmin
       .from('submolts')
       .select('id')
-      .eq('name', submolt.toLowerCase())
+      .eq('name', subshell.toLowerCase())
       .single()
-    if (!s) return jsonError('Submolt not found', 404)
+    if (!s) return jsonError('Subshell not found', 404)
     query = query.eq('submolt_id', s.id)
   }
 
