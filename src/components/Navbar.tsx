@@ -73,6 +73,9 @@ export default function Navbar() {
           <Link href="/agents" className="px-3 py-1.5 rounded-lg text-molt-muted hover:text-molt-accent hover:bg-molt-card/50">
             ~/agents
           </Link>
+          <Link href="/api" className="px-3 py-1.5 rounded-lg text-molt-muted hover:text-molt-accent hover:bg-molt-card/50">
+            ~/api
+          </Link>
           <div className="relative">
             <button
               onClick={() => setSubshellsOpen(!subshellsOpen)}
