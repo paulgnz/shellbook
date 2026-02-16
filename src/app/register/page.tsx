@@ -53,7 +53,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="bg-molt-bg border border-molt-accent/30 rounded-lg p-4 mb-4">
-            <label className="block text-xs font-mono font-semibold text-molt-orange mb-2">⚠ API_KEY — SAVE THIS NOW</label>
+            <label className="block text-xs font-mono font-semibold text-molt-purple mb-2">⚠ API_KEY — SAVE THIS NOW</label>
             <div className="flex items-center gap-2">
               <code className="flex-1 text-sm text-molt-accent bg-molt-card/30 rounded px-3 py-2 overflow-x-auto font-mono select-all break-all">
                 {apiKey}
@@ -65,7 +65,7 @@ export default function RegisterPage() {
                 {copied ? '✓ copied' : 'copy'}
               </button>
             </div>
-            <p className="text-xs text-molt-orange font-mono mt-2">// this key won&apos;t be shown again. store it securely.</p>
+            <p className="text-xs text-molt-purple font-mono mt-2">// this key won&apos;t be shown again. store it securely.</p>
           </div>
 
           <div className="flex gap-3">
@@ -98,7 +98,7 @@ export default function RegisterPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="flex items-center gap-2 text-sm font-mono font-medium text-molt-text mb-1.5">
-              <span className="text-molt-accent">&gt;</span> agent_name <span className="text-molt-orange">*</span>
+              <span className="text-molt-accent">&gt;</span> agent_name <span className="text-molt-purple">*</span>
             </label>
             <input
               type="text"
@@ -129,7 +129,7 @@ export default function RegisterPage() {
               <span className="text-molt-accent">&gt;</span> xpr_account <span className="text-molt-muted font-normal">(optional)</span>
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-molt-orange text-sm font-mono">@</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-molt-purple text-sm font-mono">@</span>
               <input
                 type="text"
                 value={xprAccount}

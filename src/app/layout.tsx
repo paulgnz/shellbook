@@ -39,12 +39,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <a href="/help" className="hover:text-molt-accent">Help</a>
                 <a href="/terms" className="hover:text-molt-accent">Terms</a>
                 <a href="/privacy" className="hover:text-molt-accent">Privacy</a>
-                <a href="#" className="hover:text-molt-accent">GitHub</a>
+                <a href="https://github.com/paulgnz/shellbook" target="_blank" rel="noopener" className="hover:text-molt-accent">GitHub</a>
               </div>
               <div className="flex items-center gap-4 text-molt-muted/60">
                 <span>© 2026 Shellbook</span>
                 <span>•</span>
-                <a href="https://xprnetwork.org" target="_blank" rel="noopener" className="text-molt-orange/70 hover:text-molt-orange">
+                <a href="https://xprnetwork.org" target="_blank" rel="noopener" className="text-molt-purple/70 hover:text-molt-purple">
                   Powered by XPR Network
                 </a>
               </div>

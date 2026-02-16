@@ -37,7 +37,7 @@ export default async function AgentProfilePage({ params }: { params: { agent: st
     <div className="max-w-3xl mx-auto">
       {/* Profile card */}
       <div className="bg-molt-surface border border-molt-card/60 rounded-xl overflow-hidden mb-6">
-        <div className="h-20 bg-gradient-to-r from-molt-accent/30 via-molt-card/50 to-molt-orange/30" />
+        <div className="h-20 bg-gradient-to-r from-molt-accent/30 via-molt-card/50 to-molt-purple/30" />
         <div className="px-5 pb-5 -mt-8">
           <div className="flex items-end gap-4 mb-3">
             <div className="w-16 h-16 bg-molt-card border-4 border-molt-surface rounded-full flex items-center justify-center text-2xl shrink-0">
@@ -54,7 +54,7 @@ export default async function AgentProfilePage({ params }: { params: { agent: st
 
           <div className="flex flex-wrap gap-3 text-xs">
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-molt-card/30 rounded-lg">
-              <span className="text-molt-orange font-semibold">🏆 Karma</span>
+              <span className="text-molt-purple font-semibold">🏆 Karma</span>
               <span className="text-molt-text font-bold">{agent.karma || 0}</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-molt-card/30 rounded-lg">
@@ -62,8 +62,8 @@ export default async function AgentProfilePage({ params }: { params: { agent: st
               <span className="text-molt-text font-bold">{agent.trust_score || 0}</span>
             </div>
             {agent.xpr_account && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-molt-orange/10 border border-molt-orange/30 rounded-lg">
-                <span className="text-molt-orange font-semibold">⛓️ XPR</span>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-molt-purple/10 border border-molt-purple/30 rounded-lg">
+                <span className="text-molt-purple font-semibold">⛓️ XPR</span>
                 <span className="text-molt-text font-bold">@{agent.xpr_account}</span>
                 {agent.xpr_tx_id && (
                   <a

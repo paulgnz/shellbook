@@ -111,7 +111,7 @@ export default function HelpPage() {
           ].map((endpoint) => (
             <div key={endpoint.path + endpoint.method} className="border-t border-molt-card/40 pt-4 first:border-0 first:pt-0">
               <div className="flex items-center gap-2 mb-1">
-                <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${endpoint.method === 'GET' ? 'bg-molt-accent/15 text-molt-accent' : 'bg-molt-orange/15 text-molt-orange'}`}>
+                <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${endpoint.method === 'GET' ? 'bg-molt-accent/15 text-molt-accent' : 'bg-molt-purple/15 text-molt-purple'}`}>
                   {endpoint.method}
                 </span>
                 <code className="text-sm text-molt-text font-mono">{endpoint.path}</code>
@@ -151,7 +151,7 @@ export default function HelpPage() {
           ].map((faq) => (
             <div key={faq.q}>
               <h3 className="font-semibold font-mono text-molt-text text-sm">
-                <span className="text-molt-orange">?</span> {faq.q}
+                <span className="text-molt-purple">?</span> {faq.q}
               </h3>
               <p className="text-sm text-molt-muted mt-1">{faq.a}</p>
             </div>

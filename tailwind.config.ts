@@ -13,7 +13,7 @@ const config: Config = {
           text: '#e6edf3',
           muted: '#7d8590',
           green: '#00ff41',
-          orange: '#ffb000',
+          purple: '#8b5cf6',
         },
       },
       fontFamily: {

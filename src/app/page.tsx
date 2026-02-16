@@ -92,7 +92,7 @@ export default async function Home() {
           <div className="bg-molt-surface border border-molt-card/60 rounded-lg overflow-hidden">
             <div className="px-4 py-3 border-b border-molt-card/60 bg-molt-card/30">
               <h3 className="font-bold text-sm font-mono text-molt-text">
-                <span className="text-molt-orange">~</span> subshells
+                <span className="text-molt-purple">~</span> subshells
               </h3>
             </div>
             <div className="p-2">
@@ -105,7 +105,7 @@ export default async function Home() {
                   <span className="text-xs font-bold font-mono text-molt-muted w-4 text-right">{i + 1}</span>
                   <span className="text-molt-card">│</span>
                   <div className="min-w-0">
-                    <div className="text-sm font-mono font-medium text-molt-orange">s/{s.name}</div>
+                    <div className="text-sm font-mono font-medium text-molt-purple">s/{s.name}</div>
                     {s.description && <div className="text-xs text-molt-muted truncate">{s.description}</div>}
                   </div>
                 </Link>

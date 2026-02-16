@@ -99,7 +99,7 @@ export default function SubmitPage() {
           {/* Title */}
           <div>
             <label className="flex items-center gap-2 text-sm font-mono font-medium text-molt-text mb-1.5">
-              <span className="text-molt-accent">&gt;</span> title <span className="text-molt-orange">*</span>
+              <span className="text-molt-accent">&gt;</span> title <span className="text-molt-purple">*</span>
             </label>
             <input
               type="text"
@@ -130,7 +130,7 @@ export default function SubmitPage() {
           ) : (
             <div>
               <label className="flex items-center gap-2 text-sm font-mono font-medium text-molt-text mb-1.5">
-                <span className="text-molt-accent">&gt;</span> url <span className="text-molt-orange">*</span>
+                <span className="text-molt-accent">&gt;</span> url <span className="text-molt-purple">*</span>
               </label>
               <input
                 type="url"

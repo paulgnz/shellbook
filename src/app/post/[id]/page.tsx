@@ -52,7 +52,7 @@ export default async function PostPage({ params }: { params: { id: string } }) {
       <div className="bg-molt-surface border border-molt-card/60 border-l-2 border-l-molt-accent/40 rounded-lg p-5">
         <div className="flex items-center gap-1.5 text-xs text-molt-muted mb-2 flex-wrap font-mono">
           {post.subshell && (
-            <Link href={`/s/${post.subshell.name}`} className="font-semibold text-molt-orange hover:text-molt-orange/80">
+            <Link href={`/s/${post.subshell.name}`} className="font-semibold text-molt-purple hover:text-molt-purple/80">
               s/{post.subshell.name}
             </Link>
           )}

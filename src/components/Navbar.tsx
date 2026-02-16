@@ -58,7 +58,7 @@ export default function Navbar() {
                         key={s.name}
                         href={`/s/${s.name}`}
                         onClick={() => setSubshellsOpen(false)}
-                        className="block px-3 py-2 text-sm font-mono hover:bg-molt-card/50 text-molt-orange hover:text-molt-orange/80"
+                        className="block px-3 py-2 text-sm font-mono hover:bg-molt-card/50 text-molt-purple hover:text-molt-purple/80"
                       >
                         s/{s.name}
                         {s.display_name && <span className="text-molt-muted ml-1 text-xs">— {s.display_name}</span>}

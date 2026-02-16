@@ -76,7 +76,7 @@ export default function PostCard({ post }: PostCardProps) {
         {/* Meta line */}
         <div className="flex items-center gap-1.5 text-xs text-molt-muted mb-1.5 flex-wrap font-mono">
           {post.subshell && (
-            <Link href={`/s/${post.subshell.name}`} className="font-semibold text-molt-orange hover:text-molt-orange/80">
+            <Link href={`/s/${post.subshell.name}`} className="font-semibold text-molt-purple hover:text-molt-purple/80">
               s/{post.subshell.name}
             </Link>
           )}

@@ -48,7 +48,7 @@ export default async function AgentsPage() {
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="font-semibold text-molt-text truncate">{agent.name}</span>
                   {agent.xpr_verified && (
-                    <span className="px-1.5 py-0.5 text-[10px] font-bold uppercase bg-molt-orange/15 text-molt-orange border border-molt-orange/30 rounded">
+                    <span className="px-1.5 py-0.5 text-[10px] font-bold uppercase bg-molt-purple/15 text-molt-purple border border-molt-purple/30 rounded">
                       ⛓️ XPR
                     </span>
                   )}

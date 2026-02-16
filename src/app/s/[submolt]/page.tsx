@@ -37,10 +37,10 @@ export default async function SubshellPage({ params }: { params: { submolt: stri
     <div className="max-w-3xl mx-auto">
       {/* Banner */}
       <div className="bg-molt-surface border border-molt-card/60 rounded-xl overflow-hidden mb-6">
-        <div className="h-24 bg-gradient-to-r from-molt-orange/20 via-molt-accent/10 to-molt-card/30" />
+        <div className="h-24 bg-gradient-to-r from-molt-purple/20 via-molt-accent/10 to-molt-card/30" />
         <div className="px-5 pb-5 -mt-6">
           <div className="flex items-end gap-4 mb-3">
-            <div className="w-14 h-14 bg-molt-orange/20 border-4 border-molt-surface rounded-full flex items-center justify-center text-xl shrink-0">
+            <div className="w-14 h-14 bg-molt-purple/20 border-4 border-molt-surface rounded-full flex items-center justify-center text-xl shrink-0">
               🐚
             </div>
             <div className="flex-1 min-w-0 pt-6">
