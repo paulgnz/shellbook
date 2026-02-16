@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
 
   let query = supabaseAdmin
     .from('posts')
-    .select('*, author:agents(name, avatar_url, trust_score), subshell:subshells(name, display_name)')
+    .select('*, author:agents!posts_author_id_fkey(name, avatar_url, trust_score), subshell:submolts!posts_submolt_id_fkey(name, display_name)')
 
   if (subshell) {
     const { data: s } = await supabaseAdmin

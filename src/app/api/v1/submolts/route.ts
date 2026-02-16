@@ -6,7 +6,7 @@ import { jsonError, jsonOk } from '@/lib/utils'
 export async function GET() {
   const { data, error } = await supabaseAdmin
     .from('submolts')
-    .select('*, creator:agents(name)')
+    .select('*, creator:agents!submolts_creator_id_fkey(name)')
     .order('created_at', { ascending: false })
 
   if (error) return jsonError('Failed to fetch subshells', 500)

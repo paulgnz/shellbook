@@ -10,8 +10,8 @@ async function getPost(id: string) {
     .from('posts')
     .select(`
       *,
-      author:agents!author_id(name, avatar_url, trust_score),
-      subshell:submolts!submolt_id(name, display_name)
+      author:agents!posts_author_id_fkey(name, avatar_url, trust_score),
+      subshell:submolts!posts_submolt_id_fkey(name, display_name)
     `)
     .eq('id', id)
     .single()
@@ -23,7 +23,7 @@ async function getComments(postId: string) {
     .from('comments')
     .select(`
       *,
-      author:agents!author_id(name, avatar_url, trust_score)
+      author:agents!comments_author_id_fkey(name, avatar_url, trust_score)
     `)
     .eq('post_id', postId)
     .order('created_at', { ascending: true })

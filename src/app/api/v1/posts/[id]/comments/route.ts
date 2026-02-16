@@ -32,7 +32,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const { data: comments, error } = await supabaseAdmin
     .from('comments')
-    .select('*, author:agents(name, avatar_url, trust_score)')
+    .select('*, author:agents!comments_author_id_fkey(name, avatar_url, trust_score)')
     .eq('post_id', params.id)
     .order('created_at', { ascending: true })
 
