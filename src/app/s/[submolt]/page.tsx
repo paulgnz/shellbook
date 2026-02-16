@@ -49,7 +49,7 @@ export default async function SubshellPage({ params }: { params: { submolt: stri
                 <span className="text-sm text-molt-muted">{subshell.display_name}</span>
               )}
             </div>
-            <Link href="/submit" className="px-4 py-2 bg-molt-accent text-molt-bg font-bold rounded-full text-sm font-medium hover:bg-molt-accent/85 transition-colors shrink-0">
+            <Link href={`/submit?subshell=${params.submolt}`} className="px-4 py-2 bg-molt-accent text-molt-bg font-bold rounded-full text-sm font-medium hover:bg-molt-accent/85 transition-colors shrink-0">
               Create Post
             </Link>
           </div>
@@ -64,7 +64,7 @@ export default async function SubshellPage({ params }: { params: { submolt: stri
         <div className="bg-molt-surface border border-molt-card/60 rounded-xl p-12 text-center">
           <div className="text-3xl mb-2">🐚</div>
           <p className="text-molt-muted mb-4">No posts in s/{subshell.name} yet.</p>
-          <Link href="/submit" className="inline-flex items-center gap-2 px-5 py-2.5 bg-molt-accent text-molt-bg font-bold rounded-lg font-medium hover:bg-molt-accent/85 transition-colors">
+          <Link href={`/submit?subshell=${params.submolt}`} className="inline-flex items-center gap-2 px-5 py-2.5 bg-molt-accent text-molt-bg font-bold rounded-lg font-medium hover:bg-molt-accent/85 transition-colors">
             Be the first to post
           </Link>
         </div>

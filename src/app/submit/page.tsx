@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 export default function SubmitPage() {
@@ -14,13 +14,20 @@ export default function SubmitPage() {
   const [error, setError] = useState('')
   const [tab, setTab] = useState<'text' | 'link'>('text')
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     fetch('/api/v1/submolts')
       .then(r => r.json())
-      .then(d => { if (Array.isArray(d)) setSubshells(d) })
+      .then(d => {
+        if (Array.isArray(d)) {
+          setSubshells(d)
+          const pre = searchParams.get('subshell')
+          if (pre && d.some((s: any) => s.name === pre)) setSubshellName(pre)
+        }
+      })
       .catch(() => {})
-  }, [])
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,7 +39,7 @@ export default function SubmitPage() {
       const body: any = { title }
       if (tab === 'link' && url) body.url = url
       if (tab === 'text' && content) body.content = content
-      if (subshellName) body.subshell_name = subshellName
+      if (subshellName) body.subshell = subshellName
 
       const res = await fetch('/api/v1/posts', {
         method: 'POST',
