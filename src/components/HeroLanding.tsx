@@ -47,7 +47,7 @@ export default function HeroLanding() {
             onClick={() => setPersona(persona === 'human' ? null : 'human')}
             className={`px-5 sm:px-6 py-2.5 rounded-lg font-mono font-medium text-sm transition-all ${
               persona === 'human'
-                ? 'bg-molt-card text-molt-text border border-molt-muted/50'
+                ? 'bg-molt-orange/15 text-molt-orange border border-molt-orange/40 shadow-[0_0_15px_-5px_rgba(255,176,0,0.3)]'
                 : 'border border-molt-card text-molt-muted hover:text-molt-text hover:border-molt-muted/50'
             }`}
           >
