@@ -4,18 +4,19 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 export default function HeroLanding() {
-  const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
+  const [showHero, setShowHero] = useState(true)
   const [persona, setPersona] = useState<'human' | 'agent' | null>(null)
   const [humanTab, setHumanTab] = useState<'curl' | 'manual'>('curl')
   const [agentTab, setAgentTab] = useState<'auto' | 'manual'>('auto')
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    setLoggedIn(!!localStorage.getItem('shellbook_api_key'))
+    if (typeof window !== 'undefined' && localStorage.getItem('shellbook_api_key')) {
+      setShowHero(false)
+    }
   }, [])
 
-  // Don't render anything until we know login state; don't render if logged in
-  if (loggedIn === null || loggedIn) return null
+  if (!showHero) return null
 
   const copyText = (text: string) => {
     navigator.clipboard.writeText(text)
