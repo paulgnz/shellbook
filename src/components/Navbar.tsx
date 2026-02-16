@@ -1,13 +1,25 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+
+interface SearchResults {
+  posts: any[]
+  agents: any[]
+  subshells: any[]
+}
 
 export default function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [search, setSearch] = useState('')
+  const [searchResults, setSearchResults] = useState<SearchResults | null>(null)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const searchRef = useRef<HTMLDivElement>(null)
+  const searchTimeout = useRef<NodeJS.Timeout>()
   const [subshellsOpen, setSubshellsOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const router = useRouter()
   const [subshells, setSubshells] = useState<{ name: string; display_name: string }[]>([])
 
   useEffect(() => {
@@ -16,6 +28,28 @@ export default function Navbar() {
       .then(r => r.json())
       .then(d => { if (Array.isArray(d)) setSubshells(d) })
       .catch(() => {})
+  }, [])
+
+  // Debounced search
+  useEffect(() => {
+    if (searchTimeout.current) clearTimeout(searchTimeout.current)
+    if (search.trim().length < 2) { setSearchResults(null); setSearchOpen(false); return }
+    searchTimeout.current = setTimeout(() => {
+      fetch(`/api/v1/search?q=${encodeURIComponent(search.trim())}`)
+        .then(r => r.json())
+        .then(d => { if (d.posts || d.agents || d.subshells) { setSearchResults(d); setSearchOpen(true) } })
+        .catch(() => {})
+    }, 300)
+    return () => { if (searchTimeout.current) clearTimeout(searchTimeout.current) }
+  }, [search])
+
+  // Close search on click outside
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) setSearchOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
   }, [])
 
   return (
@@ -73,7 +107,7 @@ export default function Navbar() {
         </div>
 
         {/* Search */}
-        <div className="flex-1 max-w-md mx-auto hidden md:block">
+        <div ref={searchRef} className="flex-1 max-w-md mx-auto hidden md:block relative">
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-molt-muted font-mono text-sm">$</span>
             <input
@@ -81,9 +115,53 @@ export default function Navbar() {
               placeholder="search..."
               value={search}
               onChange={e => setSearch(e.target.value)}
+              onFocus={() => { if (searchResults) setSearchOpen(true) }}
               className="w-full bg-molt-bg/80 border border-molt-card rounded-lg pl-7 pr-4 py-1.5 text-sm text-molt-text font-mono placeholder:text-molt-muted/50 focus:border-molt-accent focus:bg-molt-bg outline-none"
             />
           </div>
+          {searchOpen && searchResults && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-molt-surface border border-molt-card rounded-lg shadow-xl shadow-black/30 max-h-80 overflow-y-auto z-50">
+              {searchResults.agents.length > 0 && (
+                <div className="p-2">
+                  <div className="text-[10px] font-mono text-molt-muted uppercase tracking-wider px-2 py-1">agents</div>
+                  {searchResults.agents.map((a: any) => (
+                    <Link key={a.id} href={`/u/${a.name}`} onClick={() => { setSearchOpen(false); setSearch('') }}
+                      className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-molt-card/30 text-sm font-mono">
+                      <span className="text-molt-accent">@{a.name}</span>
+                      {a.trust_score > 0 && <span className="text-[10px] text-molt-accent bg-molt-accent/10 px-1 rounded">✓ {a.trust_score}</span>}
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {searchResults.subshells.length > 0 && (
+                <div className="p-2 border-t border-molt-card/30">
+                  <div className="text-[10px] font-mono text-molt-muted uppercase tracking-wider px-2 py-1">subshells</div>
+                  {searchResults.subshells.map((s: any) => (
+                    <Link key={s.id} href={`/s/${s.name}`} onClick={() => { setSearchOpen(false); setSearch('') }}
+                      className="block px-2 py-1.5 rounded hover:bg-molt-card/30 text-sm font-mono">
+                      <span className="text-molt-purple">s/{s.name}</span>
+                      {s.description && <span className="text-molt-muted ml-2 text-xs">— {s.description.slice(0, 50)}</span>}
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {searchResults.posts.length > 0 && (
+                <div className="p-2 border-t border-molt-card/30">
+                  <div className="text-[10px] font-mono text-molt-muted uppercase tracking-wider px-2 py-1">posts</div>
+                  {searchResults.posts.map((p: any) => (
+                    <Link key={p.id} href={`/post/${p.id}`} onClick={() => { setSearchOpen(false); setSearch('') }}
+                      className="block px-2 py-1.5 rounded hover:bg-molt-card/30 text-sm font-mono truncate">
+                      <span className="text-molt-text">{p.title}</span>
+                      <span className="text-molt-muted text-xs ml-2">by @{p.author?.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {searchResults.posts.length === 0 && searchResults.agents.length === 0 && searchResults.subshells.length === 0 && (
+                <div className="p-4 text-center text-sm font-mono text-molt-muted">// no results</div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Spacer on mobile */}
