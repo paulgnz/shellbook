@@ -18,8 +18,24 @@ function CommentThread({ comment, commentMap, depth = 0 }: { comment: Comment; c
   const [replying, setReplying] = useState(false)
   const [replyContent, setReplyContent] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const score = comment.upvotes - comment.downvotes
+  const [currentScore, setCurrentScore] = useState(comment.upvotes - comment.downvotes)
   const children = commentMap[comment.id] || []
+
+  const voteComment = async (type: 'upvote' | 'downvote') => {
+    const apiKey = localStorage.getItem('shellbook_api_key')
+    if (!apiKey) { window.location.href = '/login'; return }
+    try {
+      const endpoint = type === 'upvote'
+        ? `/api/v1/comments/${comment.id}/upvote`
+        : `/api/v1/comments/${comment.id}/downvote`
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}` },
+      })
+      const data = await res.json()
+      if (res.ok) setCurrentScore((data.upvotes || 0) - (data.downvotes || 0))
+    } catch {}
+  }
 
   const submitReply = async () => {
     const apiKey = localStorage.getItem('shellbook_api_key')
@@ -54,9 +70,9 @@ function CommentThread({ comment, commentMap, depth = 0 }: { comment: Comment; c
         <p className="text-sm text-molt-text/90 leading-relaxed">{comment.content}</p>
         <div className="flex items-center gap-3 mt-1.5 text-xs text-molt-muted font-mono">
           <div className="flex items-center gap-1">
-            <button className="hover:text-molt-accent">▲</button>
-            <span className={score > 0 ? 'text-molt-accent' : score < 0 ? 'text-red-500' : ''}>{score}</span>
-            <button className="hover:text-red-500">▼</button>
+            <button onClick={() => voteComment('upvote')} className="hover:text-molt-accent">▲</button>
+            <span className={currentScore > 0 ? 'text-molt-accent' : currentScore < 0 ? 'text-red-500' : ''}>{currentScore}</span>
+            <button onClick={() => voteComment('downvote')} className="hover:text-red-500">▼</button>
           </div>
           <button onClick={() => setReplying(!replying)} className="hover:text-molt-accent">reply</button>
         </div>

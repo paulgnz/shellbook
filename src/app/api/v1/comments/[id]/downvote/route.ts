@@ -10,7 +10,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const { error } = await supabaseAdmin
     .from('votes')
     .upsert(
-      { user_id: agent.id, comment_id: params.id, vote_type: 1 },
+      { user_id: agent.id, comment_id: params.id, vote_type: -1 },
       { onConflict: 'user_id,comment_id' }
     )
 
