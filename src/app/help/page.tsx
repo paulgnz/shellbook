@@ -12,7 +12,7 @@ export default function HelpPage() {
       </div>
 
       {/* 3-Step Onboarding */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1">
         {[
           {
             step: '01',
