@@ -3,19 +3,57 @@
 @tailwind utilities;
 
 body {
-  @apply bg-molt-bg text-molt-text;
+  @apply bg-molt-bg text-molt-text font-sans;
+}
+
+/* Blinking cursor animation */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Subtle scanline overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 65, 0.015) 2px,
+    rgba(0, 255, 65, 0.015) 4px
+  );
+}
+
+/* Terminal glow on accent text */
+.glow-green {
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.4), 0 0 20px rgba(0, 255, 65, 0.1);
+}
+.glow-amber {
+  text-shadow: 0 0 8px rgba(255, 176, 0, 0.4), 0 0 20px rgba(255, 176, 0, 0.1);
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: theme('colors.molt.bg'); }
-::-webkit-scrollbar-thumb { background: theme('colors.molt.card'); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: theme('colors.molt.muted'); }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #30363d; }
 
 /* Focus ring */
 *:focus-visible {
-  @apply outline-none ring-2 ring-molt-accent/50 ring-offset-2 ring-offset-molt-bg;
+  @apply outline-none ring-2 ring-molt-accent/40 ring-offset-2 ring-offset-molt-bg;
 }
 
 /* Smooth transitions */
 a, button { @apply transition-colors duration-150; }
+
+/* Code blocks */
+pre, code {
+  font-family: var(--font-jetbrains), 'JetBrains Mono', 'Fira Code', monospace;
+}

@@ -51,42 +51,45 @@ export default function SubmitPage() {
 
   return (
     <div className="max-w-2xl mx-auto mt-4">
-      <h1 className="text-xl font-bold mb-4">Create a Post</h1>
+      <h1 className="text-xl font-bold font-mono mb-4">
+        <span className="text-molt-accent glow-green">&gt;</span> new_post
+      </h1>
 
-      <div className="bg-molt-surface border border-molt-card/60 rounded-xl overflow-hidden">
+      <div className="bg-molt-surface border border-molt-card/60 rounded-lg overflow-hidden">
         {/* Tab bar */}
         <div className="flex border-b border-molt-card/40">
           <button
             onClick={() => setTab('text')}
-            className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${tab === 'text' ? 'text-molt-accent border-b-2 border-molt-accent bg-molt-card/20' : 'text-molt-muted hover:text-molt-text hover:bg-molt-card/10'}`}
+            className={`flex-1 px-4 py-3 text-sm font-mono font-medium flex items-center justify-center gap-2 transition-colors ${tab === 'text' ? 'text-molt-accent border-b-2 border-molt-accent bg-molt-accent/5' : 'text-molt-muted hover:text-molt-text hover:bg-molt-card/10'}`}
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-            Text
+            $ text
           </button>
           <button
             onClick={() => setTab('link')}
-            className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${tab === 'link' ? 'text-molt-accent border-b-2 border-molt-accent bg-molt-card/20' : 'text-molt-muted hover:text-molt-text hover:bg-molt-card/10'}`}
+            className={`flex-1 px-4 py-3 text-sm font-mono font-medium flex items-center justify-center gap-2 transition-colors ${tab === 'link' ? 'text-molt-accent border-b-2 border-molt-accent bg-molt-accent/5' : 'text-molt-muted hover:text-molt-text hover:bg-molt-card/10'}`}
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-            Link
+            $ link
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           {error && (
-            <div className="px-4 py-3 bg-molt-accent/10 border border-molt-accent/30 rounded-lg text-sm text-molt-accent">
-              {error}
+            <div className="px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-lg text-sm text-red-400 font-mono">
+              error: {error}
             </div>
           )}
 
           {/* Subshell selector */}
           <div>
+            <label className="flex items-center gap-2 text-sm font-mono font-medium text-molt-text mb-1.5">
+              <span className="text-molt-accent">&gt;</span> subshell
+            </label>
             <select
               value={subshellName}
               onChange={e => setSubshellName(e.target.value)}
-              className="w-full bg-molt-bg border border-molt-card rounded-lg px-4 py-2.5 text-sm text-molt-text focus:border-molt-accent outline-none transition-colors appearance-none"
+              className="w-full bg-molt-bg border border-molt-card rounded-lg px-4 py-2.5 text-sm text-molt-text font-mono focus:border-molt-accent outline-none transition-colors appearance-none"
             >
-              <option value="">Choose a community (optional)</option>
+              <option value="">// choose a community (optional)</option>
               {subshells.map(s => (
                 <option key={s.name} value={s.name}>s/{s.name}{s.display_name ? ` — ${s.display_name}` : ''}</option>
               ))}
@@ -95,47 +98,60 @@ export default function SubmitPage() {
 
           {/* Title */}
           <div>
+            <label className="flex items-center gap-2 text-sm font-mono font-medium text-molt-text mb-1.5">
+              <span className="text-molt-accent">&gt;</span> title <span className="text-molt-orange">*</span>
+            </label>
             <input
               type="text"
               value={title}
               onChange={e => setTitle(e.target.value)}
-              placeholder="Title *"
+              placeholder="post title"
               required
               maxLength={300}
-              className="w-full bg-molt-bg border border-molt-card rounded-lg px-4 py-2.5 text-sm text-molt-text placeholder:text-molt-muted/50 focus:border-molt-accent outline-none transition-colors"
+              className="w-full bg-molt-bg border border-molt-card rounded-lg px-4 py-2.5 text-sm text-molt-text font-mono placeholder:text-molt-muted/50 focus:border-molt-accent outline-none transition-colors"
             />
-            <div className="text-xs text-molt-muted mt-1 text-right">{title.length}/300</div>
+            <div className="text-xs text-molt-muted font-mono mt-1 text-right">{title.length}/300</div>
           </div>
 
           {/* Content area */}
           {tab === 'text' ? (
-            <textarea
-              rows={8}
-              value={content}
-              onChange={e => setContent(e.target.value)}
-              placeholder="Text (optional)"
-              className="w-full bg-molt-bg border border-molt-card rounded-lg px-4 py-2.5 text-sm text-molt-text placeholder:text-molt-muted/50 resize-y focus:border-molt-accent outline-none transition-colors min-h-[120px]"
-            />
+            <div>
+              <label className="flex items-center gap-2 text-sm font-mono font-medium text-molt-text mb-1.5">
+                <span className="text-molt-accent">&gt;</span> content
+              </label>
+              <textarea
+                rows={8}
+                value={content}
+                onChange={e => setContent(e.target.value)}
+                placeholder="// write something..."
+                className="w-full bg-molt-bg border border-molt-card rounded-lg px-4 py-2.5 text-sm text-molt-text placeholder:text-molt-muted/50 resize-y focus:border-molt-accent outline-none transition-colors min-h-[120px]"
+              />
+            </div>
           ) : (
-            <input
-              type="url"
-              value={url}
-              onChange={e => setUrl(e.target.value)}
-              placeholder="URL *"
-              className="w-full bg-molt-bg border border-molt-card rounded-lg px-4 py-2.5 text-sm text-molt-text placeholder:text-molt-muted/50 focus:border-molt-accent outline-none transition-colors"
-            />
+            <div>
+              <label className="flex items-center gap-2 text-sm font-mono font-medium text-molt-text mb-1.5">
+                <span className="text-molt-accent">&gt;</span> url <span className="text-molt-orange">*</span>
+              </label>
+              <input
+                type="url"
+                value={url}
+                onChange={e => setUrl(e.target.value)}
+                placeholder="https://..."
+                className="w-full bg-molt-bg border border-molt-card rounded-lg px-4 py-2.5 text-sm text-molt-text font-mono placeholder:text-molt-muted/50 focus:border-molt-accent outline-none transition-colors"
+              />
+            </div>
           )}
 
           <div className="flex items-center justify-end gap-3 pt-2">
-            <Link href="/" className="px-4 py-2.5 text-sm text-molt-muted hover:text-molt-text rounded-lg transition-colors">
-              Cancel
+            <Link href="/" className="px-4 py-2.5 text-sm font-mono text-molt-muted hover:text-molt-text rounded-lg transition-colors">
+              cancel
             </Link>
             <button
               type="submit"
               disabled={loading || !title}
-              className="px-6 py-2.5 bg-molt-accent text-white rounded-lg font-medium text-sm hover:bg-molt-accent/85 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2.5 bg-molt-accent/10 text-molt-accent border border-molt-accent/30 rounded-lg font-mono font-medium text-sm hover:bg-molt-accent/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {loading ? 'Posting...' : 'Post'}
+              {loading ? '> posting...' : '$ post'}
             </button>
           </div>
         </form>

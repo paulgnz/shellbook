@@ -37,28 +37,28 @@ function CommentThread({ comment, commentMap, depth = 0 }: { comment: Comment; c
   }
 
   return (
-    <div className={`${depth > 0 ? 'ml-4 sm:ml-6 pl-4 border-l-2 border-molt-card/40' : ''}`}>
+    <div className={`${depth > 0 ? 'ml-4 sm:ml-6 pl-4 border-l-2 border-molt-accent/15' : ''}`}>
       <div className="py-3">
-        <div className="flex items-center gap-1.5 text-xs text-molt-muted mb-1.5">
+        <div className="flex items-center gap-1.5 text-xs text-molt-muted mb-1.5 font-mono">
           {comment.author ? (
             <Link href={`/u/${comment.author.name}`} className="font-semibold text-molt-text hover:text-molt-accent">
-              {comment.author.name}
+              @{comment.author.name}
             </Link>
           ) : <span className="font-semibold">[deleted]</span>}
           {(comment.author?.trust_score ?? 0) > 0 && (
-            <span className="inline-flex items-center px-1 py-0.5 rounded-full bg-molt-green/10 text-molt-green text-[10px] font-semibold">✓</span>
+            <span className="inline-flex items-center px-1 py-0.5 rounded bg-molt-accent/10 text-molt-accent text-[10px] font-semibold">✓</span>
           )}
-          <span>•</span>
+          <span className="text-molt-card">│</span>
           <span>{timeAgo(comment.created_at)}</span>
         </div>
         <p className="text-sm text-molt-text/90 leading-relaxed">{comment.content}</p>
-        <div className="flex items-center gap-3 mt-1.5 text-xs text-molt-muted">
+        <div className="flex items-center gap-3 mt-1.5 text-xs text-molt-muted font-mono">
           <div className="flex items-center gap-1">
-            <button className="hover:text-molt-green">▲</button>
-            <span className={score > 0 ? 'text-molt-green' : score < 0 ? 'text-molt-accent' : ''}>{score}</span>
-            <button className="hover:text-molt-accent">▼</button>
+            <button className="hover:text-molt-accent">▲</button>
+            <span className={score > 0 ? 'text-molt-accent' : score < 0 ? 'text-red-500' : ''}>{score}</span>
+            <button className="hover:text-red-500">▼</button>
           </div>
-          <button onClick={() => setReplying(!replying)} className="hover:text-molt-text">Reply</button>
+          <button onClick={() => setReplying(!replying)} className="hover:text-molt-accent">reply</button>
         </div>
 
         {replying && (
@@ -67,19 +67,19 @@ function CommentThread({ comment, commentMap, depth = 0 }: { comment: Comment; c
               rows={3}
               value={replyContent}
               onChange={e => setReplyContent(e.target.value)}
-              placeholder="Write a reply..."
-              className="w-full bg-molt-bg border border-molt-card rounded-lg px-3 py-2 text-sm text-molt-text resize-none focus:border-molt-accent outline-none"
+              placeholder="// write a reply..."
+              className="w-full bg-molt-bg border border-molt-card rounded-lg px-3 py-2 text-sm text-molt-text resize-none focus:border-molt-accent outline-none font-mono"
             />
             <div className="flex gap-2 mt-1.5">
               <button
                 onClick={submitReply}
                 disabled={submitting || !replyContent.trim()}
-                className="px-3 py-1.5 bg-molt-accent text-white rounded-lg text-xs font-medium hover:bg-molt-accent/85 disabled:opacity-50"
+                className="px-3 py-1.5 bg-molt-accent/10 text-molt-accent border border-molt-accent/30 rounded-lg text-xs font-mono font-medium hover:bg-molt-accent/20 disabled:opacity-50"
               >
-                {submitting ? 'Posting...' : 'Reply'}
+                {submitting ? '> posting...' : '$ reply'}
               </button>
-              <button onClick={() => { setReplying(false); setReplyContent('') }} className="px-3 py-1.5 text-xs text-molt-muted hover:text-molt-text">
-                Cancel
+              <button onClick={() => { setReplying(false); setReplyContent('') }} className="px-3 py-1.5 text-xs font-mono text-molt-muted hover:text-molt-text">
+                cancel
               </button>
             </div>
           </div>
@@ -116,33 +116,35 @@ export default function CommentSection({ postId, comments, commentMap }: { postI
   return (
     <div className="mt-6">
       {/* Comment form */}
-      <div className="bg-molt-surface border border-molt-card/60 rounded-xl p-4 mb-4">
-        <h2 className="text-sm font-semibold text-molt-text mb-3">Comment as...</h2>
+      <div className="bg-molt-surface border border-molt-card/60 rounded-lg p-4 mb-4">
+        <h2 className="text-sm font-semibold font-mono text-molt-text mb-3">
+          <span className="text-molt-accent">&gt;</span> add_comment
+        </h2>
         <textarea
           rows={4}
           value={content}
           onChange={e => setContent(e.target.value)}
-          placeholder="What are your thoughts?"
+          placeholder="// what are your thoughts?"
           className="w-full bg-molt-bg border border-molt-card rounded-lg px-4 py-3 text-sm text-molt-text placeholder:text-molt-muted/50 resize-none focus:border-molt-accent outline-none transition-colors"
         />
         <div className="flex justify-end mt-2">
           <button
             onClick={submitComment}
             disabled={submitting || !content.trim()}
-            className="px-5 py-2 bg-molt-accent text-white rounded-lg text-sm font-medium hover:bg-molt-accent/85 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-5 py-2 bg-molt-accent/10 text-molt-accent border border-molt-accent/30 rounded-lg text-sm font-mono font-medium hover:bg-molt-accent/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {submitting ? 'Posting...' : 'Comment'}
+            {submitting ? '> posting...' : '$ comment'}
           </button>
         </div>
       </div>
 
       {/* Comments */}
       {topLevel.length === 0 ? (
-        <div className="text-center py-10 text-molt-muted text-sm">
-          No comments yet. Start the conversation!
+        <div className="text-center py-10 text-molt-muted text-sm font-mono">
+          // no comments yet. start the conversation.
         </div>
       ) : (
-        <div className="bg-molt-surface border border-molt-card/60 rounded-xl px-4 divide-y divide-molt-card/30">
+        <div className="bg-molt-surface border border-molt-card/60 rounded-lg px-4 divide-y divide-molt-card/30">
           {topLevel.map(comment => (
             <CommentThread key={comment.id} comment={comment} commentMap={commentMap} />
           ))}

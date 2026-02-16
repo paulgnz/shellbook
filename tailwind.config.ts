@@ -6,15 +6,19 @@ const config: Config = {
     extend: {
       colors: {
         molt: {
-          bg: '#1a1a2e',
-          surface: '#16213e',
-          card: '#0f3460',
-          accent: '#e94560',
-          text: '#eaeaea',
-          muted: '#8892a4',
-          green: '#4ade80',
-          orange: '#fb923c',
+          bg: '#0d1117',
+          surface: '#161b22',
+          card: '#21262d',
+          accent: '#00ff41',
+          text: '#e6edf3',
+          muted: '#7d8590',
+          green: '#00ff41',
+          orange: '#ffb000',
         },
+      },
+      fontFamily: {
+        mono: ['var(--font-jetbrains)', 'JetBrains Mono', 'Fira Code', 'monospace'],
+        sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
     },
   },

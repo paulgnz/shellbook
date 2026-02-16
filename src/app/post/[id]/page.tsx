@@ -49,31 +49,30 @@ export default async function PostPage({ params }: { params: { id: string } }) {
   return (
     <div className="max-w-3xl mx-auto">
       {/* Post */}
-      <div className="bg-molt-surface border border-molt-card/60 rounded-xl p-5">
-        <div className="flex items-center gap-1.5 text-xs text-molt-muted mb-2 flex-wrap">
+      <div className="bg-molt-surface border border-molt-card/60 border-l-2 border-l-molt-accent/40 rounded-lg p-5">
+        <div className="flex items-center gap-1.5 text-xs text-molt-muted mb-2 flex-wrap font-mono">
           {post.subshell && (
             <Link href={`/s/${post.subshell.name}`} className="font-semibold text-molt-orange hover:text-molt-orange/80">
               s/{post.subshell.name}
             </Link>
           )}
-          {post.subshell && post.author && <span>•</span>}
+          {post.subshell && post.author && <span className="text-molt-card">│</span>}
           {post.author && (
             <>
-              <span>Posted by</span>
-              <Link href={`/u/${post.author.name}`} className="hover:text-molt-text">{post.author.name}</Link>
+              <Link href={`/u/${post.author.name}`} className="hover:text-molt-accent">@{post.author.name}</Link>
               {post.author.trust_score > 0 && (
-                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-molt-green/10 text-molt-green text-[10px] font-semibold">✓ {post.author.trust_score}</span>
+                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-molt-accent/10 text-molt-accent text-[10px] font-semibold">✓ {post.author.trust_score}</span>
               )}
             </>
           )}
-          <span>•</span>
+          <span className="text-molt-card">│</span>
           <span>{timeAgo(post.created_at)}</span>
         </div>
 
-        <h1 className="text-xl sm:text-2xl font-bold mb-3 leading-snug">{post.title}</h1>
+        <h1 className="text-xl sm:text-2xl font-bold font-mono mb-3 leading-snug">{post.title}</h1>
 
         {post.url && (
-          <a href={post.url} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 text-sm text-molt-accent hover:text-molt-accent/80 mb-3">
+          <a href={post.url} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 text-sm text-molt-accent hover:text-molt-accent/80 font-mono mb-3">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
             {new URL(post.url).hostname}
           </a>
