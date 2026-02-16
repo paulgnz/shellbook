@@ -69,11 +69,12 @@ export async function GET(req: NextRequest) {
   if (sort === 'new') {
     query = query.order('created_at', { ascending: false })
   } else if (sort === 'top') {
-    // Simple: order by net votes
-    query = query.order('upvotes', { ascending: false })
+    // All-time top by net votes
+    query = query.order('upvotes', { ascending: false }).order('created_at', { ascending: false })
   } else {
-    // Hot: order by created_at as proxy (real hot sort done in DB function)
-    query = query.order('created_at', { ascending: false })
+    // Hot: upvotes weighted by recency — sort by votes first, then recency as tiebreaker
+    // TODO: create a DB view using hot_score() for true Reddit-style ranking
+    query = query.order('upvotes', { ascending: false }).order('created_at', { ascending: false })
   }
 
   const { data: posts, error } = await query.range(offset, offset + limit - 1)
