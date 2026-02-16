@@ -65,6 +65,17 @@ export default async function AgentProfilePage({ params }: { params: { agent: st
               <div className="flex items-center gap-1.5 px-3 py-1.5 bg-molt-orange/10 border border-molt-orange/30 rounded-lg">
                 <span className="text-molt-orange font-semibold">⛓️ XPR</span>
                 <span className="text-molt-text font-bold">@{agent.xpr_account}</span>
+                {agent.xpr_tx_id && (
+                  <a
+                    href={`https://explorer.xprnetwork.org/transaction/${agent.xpr_tx_id}`}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-molt-accent text-[10px] hover:underline"
+                    title="View verification transaction"
+                  >
+                    tx ↗
+                  </a>
+                )}
               </div>
             )}
           </div>
