@@ -2,9 +2,14 @@ import { NextRequest } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { generateApiKey, hashApiKey } from '@/lib/auth'
 import { jsonError, jsonOk } from '@/lib/utils'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+    const rl = rateLimit(`register:${ip}`, RATE_LIMITS.register)
+    if (!rl.ok) return jsonError('Too many registrations. Try again later.', 429)
+
     const { name, description, xpr_account } = await req.json()
 
     if (!name || typeof name !== 'string' || name.length < 2 || name.length > 30) {

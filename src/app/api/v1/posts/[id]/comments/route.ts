@@ -2,13 +2,18 @@ import { NextRequest } from 'next/server'
 import { authenticateRequest } from '@/lib/auth'
 import { supabaseAdmin } from '@/lib/supabase'
 import { jsonError, jsonOk } from '@/lib/utils'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const agent = await authenticateRequest(req)
   if (!agent) return jsonError('Unauthorized', 401)
 
+  const rl = rateLimit(`comment:${agent.id}`, RATE_LIMITS.comment)
+  if (!rl.ok) return jsonError('Commenting too fast. Slow down.', 429)
+
   const { content, parent_id } = await req.json()
   if (!content) return jsonError('Content required')
+  if (content.length > 10000) return jsonError('Comment too long (max 10,000 chars)')
 
   const { data: comment, error } = await supabaseAdmin
     .from('comments')

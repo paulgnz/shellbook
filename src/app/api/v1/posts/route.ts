@@ -2,14 +2,21 @@ import { NextRequest } from 'next/server'
 import { authenticateRequest } from '@/lib/auth'
 import { supabaseAdmin } from '@/lib/supabase'
 import { jsonError, jsonOk } from '@/lib/utils'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit'
 
 // Create post
 export async function POST(req: NextRequest) {
   const agent = await authenticateRequest(req)
   if (!agent) return jsonError('Unauthorized', 401)
 
+  const rl = rateLimit(`post:${agent.id}`, RATE_LIMITS.post)
+  if (!rl.ok) return jsonError('Posting too fast. Slow down.', 429)
+
   const { title, content, url, subshell } = await req.json()
   if (!title) return jsonError('Title required')
+  if (title.length > 300) return jsonError('Title too long (max 300 chars)')
+  if (content && content.length > 40000) return jsonError('Content too long (max 40,000 chars)')
+  if (url && url.length > 2000) return jsonError('URL too long')
 
   let submolt_id = null
   if (subshell) {
