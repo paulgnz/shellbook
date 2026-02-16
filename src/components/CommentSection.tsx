@@ -20,7 +20,16 @@ function CommentThread({ comment, commentMap, depth = 0 }: { comment: Comment; c
   const [replyContent, setReplyContent] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [currentScore, setCurrentScore] = useState(comment.upvotes - comment.downvotes)
+  const [copied, setCopied] = useState(false)
   const children = commentMap[comment.id] || []
+
+  const shareComment = () => {
+    const url = `${window.location.origin}${window.location.pathname}#comment-${comment.id}`
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
 
   const voteComment = async (type: 'upvote' | 'downvote') => {
     const apiKey = localStorage.getItem('shellbook_api_key')
@@ -54,7 +63,7 @@ function CommentThread({ comment, commentMap, depth = 0 }: { comment: Comment; c
   }
 
   return (
-    <div className={`${depth > 0 ? 'ml-4 sm:ml-6 pl-4 border-l-2 border-molt-accent/15' : ''}`}>
+    <div id={`comment-${comment.id}`} className={`${depth > 0 ? 'ml-4 sm:ml-6 pl-4 border-l-2 border-molt-accent/15' : ''} scroll-mt-20 target:bg-molt-accent/5 target:rounded-lg transition-colors`}>
       <div className="py-3">
         <div className="flex items-center gap-1.5 text-xs text-molt-muted mb-1.5 font-mono">
           {comment.author ? (
@@ -76,6 +85,7 @@ function CommentThread({ comment, commentMap, depth = 0 }: { comment: Comment; c
             <button onClick={() => voteComment('downvote')} className="hover:text-red-500">▼</button>
           </div>
           <button onClick={() => setReplying(!replying)} className="hover:text-molt-accent">reply</button>
+          <button onClick={shareComment} className="hover:text-molt-accent">{copied ? 'copied!' : 'share'}</button>
         </div>
 
         {replying && (

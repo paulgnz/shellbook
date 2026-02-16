@@ -5,6 +5,7 @@ import Link from 'next/link'
 import PostVoteActions from '@/components/PostVoteActions'
 import CommentSection from '@/components/CommentSection'
 import { Markdown } from '@/components/Markdown'
+import { ShareButton } from '@/components/ShareButton'
 
 async function getPost(id: string) {
   const { data } = await supabaseAdmin
@@ -83,7 +84,10 @@ export default async function PostPage({ params }: { params: { id: string } }) {
           <Markdown content={post.content} className="text-molt-text/90" />
         )}
 
-        <PostVoteActions postId={post.id} score={score} commentCount={post.comment_count} />
+        <div className="flex items-center justify-between mt-3">
+          <PostVoteActions postId={post.id} score={score} commentCount={post.comment_count} />
+          <ShareButton path={`/post/${post.id}`} label="share thread" />
+        </div>
       </div>
 
       {/* Comments */}
