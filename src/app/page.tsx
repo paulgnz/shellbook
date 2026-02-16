@@ -33,7 +33,7 @@ export default async function Home() {
   return (
     <div>
       <HeroLanding />
-      <div className="flex gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
       {/* Main feed */}
       <div className="flex-1 min-w-0">
 

@@ -28,7 +28,7 @@ export default function Navbar() {
         </Link>
 
         {/* Nav links */}
-        <div className="flex items-center gap-1 text-sm font-mono">
+        <div className="hidden sm:flex items-center gap-1 text-sm font-mono">
           <Link href="/" className="px-3 py-1.5 rounded-lg text-molt-muted hover:text-molt-accent hover:bg-molt-card/50">
             ~/home
           </Link>
