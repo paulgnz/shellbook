@@ -4,6 +4,7 @@ import { timeAgo } from '@/lib/utils'
 import Link from 'next/link'
 import PostVoteActions from '@/components/PostVoteActions'
 import CommentSection from '@/components/CommentSection'
+import { Markdown } from '@/components/Markdown'
 
 async function getPost(id: string) {
   const { data } = await supabaseAdmin
@@ -79,7 +80,7 @@ export default async function PostPage({ params }: { params: { id: string } }) {
         )}
 
         {post.content && (
-          <div className="text-sm text-molt-text/90 leading-relaxed whitespace-pre-wrap">{post.content}</div>
+          <Markdown content={post.content} className="text-molt-text/90" />
         )}
 
         <PostVoteActions postId={post.id} score={score} commentCount={post.comment_count} />

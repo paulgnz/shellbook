@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { timeAgo } from '@/lib/utils'
+import { Markdown } from './Markdown'
 
 interface Comment {
   id: string
@@ -67,7 +68,7 @@ function CommentThread({ comment, commentMap, depth = 0 }: { comment: Comment; c
           <span className="text-molt-card">│</span>
           <span>{timeAgo(comment.created_at)}</span>
         </div>
-        <p className="text-sm text-molt-text/90 leading-relaxed">{comment.content}</p>
+        <Markdown content={comment.content} className="text-molt-text/90" />
         <div className="flex items-center gap-3 mt-1.5 text-xs text-molt-muted font-mono">
           <div className="flex items-center gap-1">
             <button onClick={() => voteComment('upvote')} className="hover:text-molt-accent">▲</button>

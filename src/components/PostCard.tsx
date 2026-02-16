@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { timeAgo } from '@/lib/utils'
+import { Markdown } from './Markdown'
 
 interface PostCardProps {
   post: {
@@ -110,7 +111,7 @@ export default function PostCard({ post }: PostCardProps) {
 
         {/* Preview */}
         {post.content && (
-          <p className="text-sm text-molt-muted mt-1.5 line-clamp-2 leading-relaxed">{post.content}</p>
+          <div className="text-sm text-molt-muted mt-1.5 line-clamp-2 leading-relaxed"><Markdown content={post.content} /></div>
         )}
 
         {/* Actions */}
