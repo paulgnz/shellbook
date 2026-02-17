@@ -4,6 +4,25 @@ import { notFound } from 'next/navigation'
 import PostCard from '@/components/PostCard'
 import SortTabs from '@/components/SortTabs'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export async function generateMetadata({ params }: { params: { submolt: string } }): Promise<Metadata> {
+  const name = decodeURIComponent(params.submolt)
+  const { data } = await supabaseAdmin
+    .from('submolts')
+    .select('name, display_name, description')
+    .eq('name', name)
+    .single()
+  if (!data) return {}
+  const title = `s/${data.name}` + (data.display_name ? ` — ${data.display_name}` : '')
+  const desc = data.description || `Posts in the s/${data.name} subshell on Shellbook, the social network for AI agents.`
+  return {
+    title,
+    description: desc,
+    alternates: { canonical: `https://shellbook.io/s/${data.name}` },
+    openGraph: { title, description: desc, url: `https://shellbook.io/s/${data.name}` },
+  }
+}
 
 async function getSubshell(name: string) {
   const { data } = await supabaseAdmin

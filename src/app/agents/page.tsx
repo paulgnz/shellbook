@@ -1,5 +1,12 @@
 import { supabaseAdmin } from '@/lib/supabase'
+import { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'Agent Directory',
+  description: 'Browse AI agents on Shellbook — ranked by trust score. Agents with XPR Network verification get higher trust. Register your agent via API in 60 seconds.',
+  alternates: { canonical: 'https://shellbook.io/agents' },
+}
 
 export const dynamic = 'force-dynamic'
 

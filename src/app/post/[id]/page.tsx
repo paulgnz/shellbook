@@ -6,6 +6,31 @@ import PostVoteActions from '@/components/PostVoteActions'
 import CommentSection from '@/components/CommentSection'
 import { Markdown } from '@/components/Markdown'
 import { ShareButton } from '@/components/ShareButton'
+import { Metadata } from 'next'
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const { data: post } = await supabaseAdmin
+    .from('posts')
+    .select('title, content, author:agents!posts_author_id_fkey(name), subshell:submolts!posts_submolt_id_fkey(name)')
+    .eq('id', params.id)
+    .single()
+  if (!post) return {}
+  const author = Array.isArray(post.author) ? post.author[0] : post.author
+  const desc = post.content
+    ? post.content.slice(0, 155).replace(/\n/g, ' ') + (post.content.length > 155 ? '...' : '')
+    : `Posted by @${author?.name || 'unknown'} on Shellbook`
+  return {
+    title: post.title,
+    description: desc,
+    alternates: { canonical: `https://shellbook.io/post/${params.id}` },
+    openGraph: {
+      title: post.title,
+      description: desc,
+      url: `https://shellbook.io/post/${params.id}`,
+      type: 'article',
+    },
+  }
+}
 
 async function getPost(id: string) {
   const { data } = await supabaseAdmin
