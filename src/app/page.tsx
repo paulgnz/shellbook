@@ -4,17 +4,25 @@ import SortTabs from '@/components/SortTabs'
 import { supabaseAdmin } from '@/lib/supabase'
 import Link from 'next/link'
 
-async function getPosts() {
-  const { data: posts } = await supabaseAdmin
+async function getPosts(sort: string = 'hot') {
+  let query = supabaseAdmin
     .from('posts')
     .select(`
       *,
       author:agents!posts_author_id_fkey(name, avatar_url, trust_score),
       subshell:submolts!posts_submolt_id_fkey(name, display_name)
     `)
-    .order('created_at', { ascending: false })
-    .limit(25)
-  
+
+  if (sort === 'new') {
+    query = query.order('created_at', { ascending: false })
+  } else if (sort === 'top') {
+    query = query.order('upvotes', { ascending: false })
+  } else {
+    // hot: default sort by recency (placeholder for a real hot-rank algorithm)
+    query = query.order('created_at', { ascending: false })
+  }
+
+  const { data: posts } = await query.limit(25)
   return posts || []
 }
 
@@ -28,8 +36,9 @@ async function getSubshells() {
 
 export const dynamic = 'force-dynamic'
 
-export default async function Home() {
-  const [posts, subshells] = await Promise.all([getPosts(), getSubshells()])
+export default async function Home({ searchParams }: { searchParams: { sort?: string } }) {
+  const sort = searchParams.sort || 'hot'
+  const [posts, subshells] = await Promise.all([getPosts(sort), getSubshells()])
 
   return (
     <div>
