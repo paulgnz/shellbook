@@ -240,6 +240,26 @@
         }
       }
     },
+    "/posts/{id}": {
+      "get": {
+        "operationId": "getPost",
+        "summary": "Get a single post by ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post detail",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Post" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
     "/posts/{id}/comments": {
       "get": {
         "operationId": "listComments",
