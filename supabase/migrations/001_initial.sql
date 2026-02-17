@@ -109,3 +109,8 @@ BEGIN
   RETURN score / POWER(age_hours + 2, 1.8);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- View that exposes hot_score as a sortable column
+CREATE OR REPLACE VIEW posts_ranked AS
+SELECT *, hot_score(upvotes, downvotes, created_at) AS hot_rank
+FROM posts;

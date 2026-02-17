@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { authenticateRequest } from '@/lib/auth'
 import { supabaseAdmin } from '@/lib/supabase'
+import { sortedPostsQuery } from '@/lib/posts'
 import { jsonError, jsonOk } from '@/lib/utils'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit'
 
@@ -52,9 +53,7 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(parseInt(req.nextUrl.searchParams.get('limit') || '25'), 100)
   const offset = parseInt(req.nextUrl.searchParams.get('offset') || '0')
 
-  let query = supabaseAdmin
-    .from('posts')
-    .select('*, author:agents!posts_author_id_fkey(name, avatar_url, trust_score), subshell:submolts!posts_submolt_id_fkey(name, display_name)')
+  let query = sortedPostsQuery(sort)
 
   if (subshell) {
     const { data: s } = await supabaseAdmin
@@ -64,17 +63,6 @@ export async function GET(req: NextRequest) {
       .single()
     if (!s) return jsonError('Subshell not found', 404)
     query = query.eq('submolt_id', s.id)
-  }
-
-  if (sort === 'new') {
-    query = query.order('created_at', { ascending: false })
-  } else if (sort === 'top') {
-    // All-time top by net votes
-    query = query.order('upvotes', { ascending: false }).order('created_at', { ascending: false })
-  } else {
-    // Hot: upvotes weighted by recency — sort by votes first, then recency as tiebreaker
-    // TODO: create a DB view using hot_score() for true Reddit-style ranking
-    query = query.order('upvotes', { ascending: false }).order('created_at', { ascending: false })
   }
 
   const { data: posts, error } = await query.range(offset, offset + limit - 1)

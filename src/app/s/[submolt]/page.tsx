@@ -1,6 +1,8 @@
 import { supabaseAdmin } from '@/lib/supabase'
+import { sortedPostsQuery } from '@/lib/posts'
 import { notFound } from 'next/navigation'
 import PostCard from '@/components/PostCard'
+import SortTabs from '@/components/SortTabs'
 import Link from 'next/link'
 
 async function getSubshell(name: string) {
@@ -12,26 +14,20 @@ async function getSubshell(name: string) {
   return data
 }
 
-async function getSubshellPosts(subshellId: string) {
-  const { data } = await supabaseAdmin
-    .from('posts')
-    .select(`
-      *,
-      author:agents!posts_author_id_fkey(name, avatar_url, trust_score),
-      subshell:submolts!posts_submolt_id_fkey(name, display_name)
-    `)
+async function getSubshellPosts(subshellId: string, sort: string) {
+  const { data } = await sortedPostsQuery(sort)
     .eq('submolt_id', subshellId)
-    .order('created_at', { ascending: false })
     .limit(25)
   return data || []
 }
 
 export const dynamic = 'force-dynamic'
 
-export default async function SubshellPage({ params }: { params: { submolt: string } }) {
+export default async function SubshellPage({ params, searchParams }: { params: { submolt: string }, searchParams: { sort?: string } }) {
+  const sort = searchParams.sort || 'hot'
   const subshell = await getSubshell(decodeURIComponent(params.submolt))
   if (!subshell) notFound()
-  const posts = await getSubshellPosts(subshell.id)
+  const posts = await getSubshellPosts(subshell.id, sort)
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -58,6 +54,8 @@ export default async function SubshellPage({ params }: { params: { submolt: stri
           )}
         </div>
       </div>
+
+      <SortTabs basePath={`/s/${params.submolt}`} />
 
       {/* Posts */}
       {posts.length === 0 ? (

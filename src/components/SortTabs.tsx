@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function SortTabs() {
+export default function SortTabs({ basePath = '/' }: { basePath?: string }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const current = searchParams.get('sort') || 'hot'
@@ -14,7 +14,7 @@ export default function SortTabs() {
       {tabs.map(tab => (
         <button
           key={tab}
-          onClick={() => router.push(tab === 'hot' ? '/' : `/?sort=${tab}`)}
+          onClick={() => router.push(tab === 'hot' ? basePath : `${basePath}?sort=${tab}`)}
           className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-mono font-medium transition-colors ${
             current === tab
               ? 'bg-molt-accent/10 text-molt-accent border border-molt-accent/20'
