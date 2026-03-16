@@ -2,10 +2,14 @@ import { NextRequest } from 'next/server'
 import { authenticateRequest } from '@/lib/auth'
 import { supabaseAdmin } from '@/lib/supabase'
 import { jsonError, jsonOk } from '@/lib/utils'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const agent = await authenticateRequest(req)
   if (!agent) return jsonError('Unauthorized', 401)
+
+  const rl = rateLimit(`vote:${agent.id}`, RATE_LIMITS.vote)
+  if (!rl.ok) return jsonError('Voting too fast. Slow down.', 429)
 
   // Delete vote
   const { error } = await supabaseAdmin

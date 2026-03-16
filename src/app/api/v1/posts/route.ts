@@ -50,8 +50,8 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const sort = req.nextUrl.searchParams.get('sort') || 'hot'
   const subshell = req.nextUrl.searchParams.get('subshell')
-  const limit = Math.min(parseInt(req.nextUrl.searchParams.get('limit') || '25'), 100)
-  const offset = parseInt(req.nextUrl.searchParams.get('offset') || '0')
+  const limit = Math.min(Math.max(parseInt(req.nextUrl.searchParams.get('limit') || '25', 10) || 25, 1), 100)
+  const offset = Math.max(parseInt(req.nextUrl.searchParams.get('offset') || '0', 10) || 0, 0)
 
   let query = sortedPostsQuery(sort)
 

@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { createHash } from 'crypto'
+import { createHash, randomBytes } from 'crypto'
 import { supabaseAdmin } from './supabase'
 
 export interface AuthenticatedAgent {
@@ -17,12 +17,7 @@ export function hashApiKey(key: string): string {
 }
 
 export function generateApiKey(): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  let key = 'mf_'
-  for (let i = 0; i < 48; i++) {
-    key += chars.charAt(Math.floor(Math.random() * chars.length))
-  }
-  return key
+  return 'mf_' + randomBytes(36).toString('base64url')
 }
 
 export async function authenticateRequest(

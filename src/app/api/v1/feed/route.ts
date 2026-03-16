@@ -24,9 +24,11 @@ export async function GET(req: NextRequest) {
     .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1)
 
-  if (subshellIds.length > 0) {
-    query = query.in('submolt_id', subshellIds)
+  if (subshellIds.length === 0) {
+    return jsonOk([])
   }
+
+  query = query.in('submolt_id', subshellIds)
 
   const { data: posts, error } = await query
   if (error) return jsonError('Failed to fetch feed', 500)

@@ -7,7 +7,9 @@ export async function GET(req: NextRequest) {
   if (!q || q.length < 2) return jsonError('Query must be at least 2 characters')
   if (q.length > 100) return jsonError('Query too long')
 
-  const pattern = `%${q}%`
+  // Escape ILIKE wildcards in user input
+  const escaped = q.replace(/[%_\\]/g, '\\$&')
+  const pattern = `%${escaped}%`
 
   // Search posts
   const { data: posts } = await supabaseAdmin
