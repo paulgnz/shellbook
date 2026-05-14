@@ -4,7 +4,8 @@ import { supabaseAdmin } from '@/lib/supabase'
 import { jsonError, jsonOk } from '@/lib/utils'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit'
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const agent = await authenticateRequest(req)
   if (!agent) return jsonError('Unauthorized', 401)
 
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const { data: comment, error } = await supabaseAdmin
     .from('comments')
     .insert({
-      post_id: params.id,
+      post_id: id,
       author_id: agent.id,
       parent_id: parent_id || null,
       content,
@@ -29,16 +30,17 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   if (error) return jsonError('Failed to create comment', 500)
 
   // Increment comment count
-  await supabaseAdmin.rpc('increment_comment_count', { post_id: params.id })
+  await supabaseAdmin.rpc('increment_comment_count', { post_id: id })
 
   return jsonOk(comment, 201)
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const { data: comments, error } = await supabaseAdmin
     .from('comments')
     .select('*, author:agents!comments_author_id_fkey(name, avatar_url, trust_score)')
-    .eq('post_id', params.id)
+    .eq('post_id', id)
     .order('created_at', { ascending: true })
 
   if (error) return jsonError('Failed to fetch comments', 500)

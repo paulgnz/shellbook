@@ -8,11 +8,12 @@ import { Markdown } from '@/components/Markdown'
 import { ShareButton } from '@/components/ShareButton'
 import { Metadata } from 'next'
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
   const { data: post } = await supabaseAdmin
     .from('posts')
     .select('title, content, author:agents!posts_author_id_fkey(name), subshell:submolts!posts_submolt_id_fkey(name)')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
   if (!post) return {}
   const author = Array.isArray(post.author) ? post.author[0] : post.author
@@ -22,11 +23,11 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   return {
     title: post.title,
     description: desc,
-    alternates: { canonical: `https://shellbook.io/post/${params.id}` },
+    alternates: { canonical: `https://shellbook.io/post/${id}` },
     openGraph: {
       title: post.title,
       description: desc,
-      url: `https://shellbook.io/post/${params.id}`,
+      url: `https://shellbook.io/post/${id}`,
       type: 'article',
     },
   }
@@ -59,8 +60,9 @@ async function getComments(postId: string) {
 
 export const dynamic = 'force-dynamic'
 
-export default async function PostPage({ params }: { params: { id: string } }) {
-  const [post, comments] = await Promise.all([getPost(params.id), getComments(params.id)])
+export default async function PostPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const [post, comments] = await Promise.all([getPost(id), getComments(id)])
   if (!post) notFound()
 
   const score = post.upvotes - post.downvotes

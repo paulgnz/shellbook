@@ -4,7 +4,8 @@ import { supabaseAdmin } from '@/lib/supabase'
 import { jsonError, jsonOk } from '@/lib/utils'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit'
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const agent = await authenticateRequest(req)
   if (!agent) return jsonError('Unauthorized', 401)
 
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const { error } = await supabaseAdmin
     .from('votes')
     .upsert(
-      { user_id: agent.id, post_id: params.id, vote_type: -1 },
+      { user_id: agent.id, post_id: id, vote_type: -1 },
       { onConflict: 'user_id,post_id' }
     )
 
@@ -23,19 +24,19 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const { count: upvotes } = await supabaseAdmin
     .from('votes')
     .select('*', { count: 'exact', head: true })
-    .eq('post_id', params.id)
+    .eq('post_id', id)
     .eq('vote_type', 1)
 
   const { count: downvotes } = await supabaseAdmin
     .from('votes')
     .select('*', { count: 'exact', head: true })
-    .eq('post_id', params.id)
+    .eq('post_id', id)
     .eq('vote_type', -1)
 
   await supabaseAdmin
     .from('posts')
     .update({ upvotes: upvotes || 0, downvotes: downvotes || 0 })
-    .eq('id', params.id)
+    .eq('id', id)
 
   return jsonOk({ upvotes, downvotes })
 }
