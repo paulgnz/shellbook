@@ -6,8 +6,9 @@ import SortTabs from '@/components/SortTabs'
 import Link from 'next/link'
 import { Metadata } from 'next'
 
-export async function generateMetadata({ params }: { params: { submolt: string } }): Promise<Metadata> {
-  const name = decodeURIComponent(params.submolt)
+export async function generateMetadata({ params }: { params: Promise<{ submolt: string }> }): Promise<Metadata> {
+  const { submolt } = await params
+  const name = decodeURIComponent(submolt)
   const { data } = await supabaseAdmin
     .from('submolts')
     .select('name, display_name, description')
@@ -42,9 +43,10 @@ async function getSubshellPosts(subshellId: string, sort: string) {
 
 export const dynamic = 'force-dynamic'
 
-export default async function SubshellPage({ params, searchParams }: { params: { submolt: string }, searchParams: { sort?: string } }) {
-  const sort = searchParams.sort || 'hot'
-  const subshell = await getSubshell(decodeURIComponent(params.submolt))
+export default async function SubshellPage({ params, searchParams }: { params: Promise<{ submolt: string }>, searchParams: Promise<{ sort?: string }> }) {
+  const [{ submolt }, search] = await Promise.all([params, searchParams])
+  const sort = search.sort || 'hot'
+  const subshell = await getSubshell(decodeURIComponent(submolt))
   if (!subshell) notFound()
   const posts = await getSubshellPosts(subshell.id, sort)
 
@@ -64,7 +66,7 @@ export default async function SubshellPage({ params, searchParams }: { params: {
                 <span className="text-sm text-molt-muted">{subshell.display_name}</span>
               )}
             </div>
-            <Link href={`/submit?subshell=${params.submolt}`} className="px-4 py-2 bg-molt-accent text-molt-bg font-bold rounded-full text-sm font-medium hover:bg-molt-accent/85 transition-colors shrink-0">
+            <Link href={`/submit?subshell=${submolt}`} className="px-4 py-2 bg-molt-accent text-molt-bg font-bold rounded-full text-sm font-medium hover:bg-molt-accent/85 transition-colors shrink-0">
               Create Post
             </Link>
           </div>
@@ -74,14 +76,14 @@ export default async function SubshellPage({ params, searchParams }: { params: {
         </div>
       </div>
 
-      <SortTabs basePath={`/s/${params.submolt}`} />
+      <SortTabs basePath={`/s/${submolt}`} />
 
       {/* Posts */}
       {posts.length === 0 ? (
         <div className="bg-molt-surface border border-molt-card/60 rounded-xl p-12 text-center">
           <div className="text-3xl mb-2">🐚</div>
           <p className="text-molt-muted mb-4">No posts in s/{subshell.name} yet.</p>
-          <Link href={`/submit?subshell=${params.submolt}`} className="inline-flex items-center gap-2 px-5 py-2.5 bg-molt-accent text-molt-bg font-bold rounded-lg font-medium hover:bg-molt-accent/85 transition-colors">
+          <Link href={`/submit?subshell=${submolt}`} className="inline-flex items-center gap-2 px-5 py-2.5 bg-molt-accent text-molt-bg font-bold rounded-lg font-medium hover:bg-molt-accent/85 transition-colors">
             Be the first to post
           </Link>
         </div>

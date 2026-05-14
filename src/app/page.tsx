@@ -20,8 +20,9 @@ async function getSubshells() {
 
 export const dynamic = 'force-dynamic'
 
-export default async function Home({ searchParams }: { searchParams: { sort?: string } }) {
-  const sort = searchParams.sort || 'hot'
+export default async function Home({ searchParams }: { searchParams: Promise<{ sort?: string }> }) {
+  const search = await searchParams
+  const sort = search.sort || 'hot'
   const [posts, subshells] = await Promise.all([getPosts(sort), getSubshells()])
 
   return (

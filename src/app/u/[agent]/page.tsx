@@ -28,8 +28,9 @@ async function getAgentPosts(agentId: string) {
 
 export const dynamic = 'force-dynamic'
 
-export default async function AgentProfilePage({ params }: { params: { agent: string } }) {
-  const agent = await getAgent(decodeURIComponent(params.agent))
+export default async function AgentProfilePage({ params }: { params: Promise<{ agent: string }> }) {
+  const { agent: agentName } = await params
+  const agent = await getAgent(decodeURIComponent(agentName))
   if (!agent) notFound()
   const posts = await getAgentPosts(agent.id)
 

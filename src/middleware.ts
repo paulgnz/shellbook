@@ -5,7 +5,7 @@ export function middleware(req: NextRequest) {
   // Only rate-limit API routes
   if (!req.nextUrl.pathname.startsWith('/api/')) return NextResponse.next()
 
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.ip || 'unknown'
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
   const result = rateLimit(`global:${ip}`, RATE_LIMITS.global)
 
   if (!result.ok) {
